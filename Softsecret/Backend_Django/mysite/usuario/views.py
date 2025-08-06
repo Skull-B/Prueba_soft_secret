@@ -18,10 +18,10 @@ class LoginView(APIView):
                 "mensaje": "Login Correcto",
                 "usuario": {
                     "id": usuario.id,
-                    "nombre": usuario.first_name,   # campo propio de AbstractUser
-                    "apellido": usuario.last_name,  # campo propio de AbstractUser
-                    "correo": usuario.correo,       # tu campo personalizado
-                    "rol": usuario.rol              # tu campo personalizado
+                    "nombre": usuario.first_name,   
+                    "apellido": usuario.last_name,  
+                    "correo": usuario.correo,       
+                    "rol": usuario.rol             
                 },
                 "token": {
                     "refresh": str(refresh),

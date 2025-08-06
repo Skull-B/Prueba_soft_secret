@@ -10,7 +10,7 @@ def obtener_usuario_desde_token(request):
     try:
         token = AccessToken(token_str)
 
-        # Buscar por 'id' o 'user_id'
+
         usuario_id = token.get("id") or token.get("user_id")
         if not usuario_id:
             return None
