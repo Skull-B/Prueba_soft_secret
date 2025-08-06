@@ -14,8 +14,8 @@ function ActaDetalle() {
 
   const fetchActa = async () => {
     try {
-      const response = await api.get(`documentos/actas/${id}/`); // URL corregida
-      setActa(response.data);
+      const res = await api.get(`documentos/actas/${id}/`); // asegúrate que la URL es correcta y coincide con el backend
+      setActa(res.data);
     } catch (error) {
       console.error("Error al obtener acta:", error);
     } finally {
@@ -51,24 +51,25 @@ function ActaDetalle() {
         )}
       </div>
 
-      <h3> Compromisos</h3>
+      <h3>Compromisos</h3>
       {acta.compromisos && acta.compromisos.length > 0 ? (
         <ul>
           {acta.compromisos.map((comp) => (
-            <li key={comp.id}>
+            <li key={comp.id} style={{ marginBottom: "10px" }}>
               <b>{comp.descripcion}</b> - Responsable: {comp.responsable}
+              <br />
+              <button
+                style={{ marginTop: "5px" }}
+                onClick={() => navigate(`/compromisos/${comp.id}/gestiones/nueva`)}
+              >
+                 Agregar Gestión
+              </button>
             </li>
           ))}
         </ul>
       ) : (
         <p>No hay compromisos asociados</p>
       )}
-
-      <div style={{ marginTop: "20px" }}>
-        <button onClick={() => navigate(`/actas/${id}/gestiones/nueva`)}>
-          Agregar Gestión
-        </button>
-      </div>
     </div>
   );
 }

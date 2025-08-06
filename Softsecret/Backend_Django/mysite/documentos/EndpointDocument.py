@@ -6,10 +6,10 @@ class CompromisoEndpoint(serializers.ModelSerializer):
         model = Compromiso
         fields = '__all__'
 class ActaEndpoint(serializers.ModelSerializer):
-    compromiso = CompromisoEndpoint(many=True , read_only=True)
+    compromisos = CompromisoEndpoint(many=True , read_only=True)
     class Meta:
         model = Acta
-        fields = ['id', 'titulo', 'estado', 'fecha', 'creador', 'compromiso', 'Archivo']
+        fields = ['id', 'titulo', 'estado', 'fecha', 'creador', 'compromisos', 'Archivo']
 
 class GestinarEndpoint(serializers.ModelSerializer):
     class Meta:

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../Api/Conexion"; // Usar la nueva instancia
+import api from "../Api/Conexion";
 
 function Login({ setUser }) {
   const navigate = useNavigate();
@@ -14,27 +14,29 @@ function Login({ setUser }) {
     try {
       const res = await api.post("usuarios/login/", {
         correo,
-        contrasena: contraseña,
+        contrasena: contraseña, // usa el nombre correcto que espera tu backend
       });
 
-      const data = res.data;
+      console.log("Respuesta login:", res.data); // debug
 
-      // Guardar en localStorage
-      localStorage.setItem("access", data.access);
-      localStorage.setItem("refresh", data.refresh);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      const data = res.data; // aquí definimos data
+
+      // Guardar en localStorage usando las claves correctas que devuelve tu backend
+      localStorage.setItem("access", data.token.access);
+      localStorage.setItem("refresh", data.token.refresh);
+      localStorage.setItem("user", JSON.stringify(data.usuario)); // "usuario" según tu backend
 
       // Actualizar estado del usuario
-      setUser(data.user);
+      setUser(data.usuario);
 
       navigate("/actas");
     } catch (err) {
+      console.error("Error en login:", err);
       if (err.response && err.response.status === 401) {
         setError("Credenciales inválidas");
       } else {
         setError("Error al conectar con el servidor");
       }
-      console.error(err);
     }
   };
 

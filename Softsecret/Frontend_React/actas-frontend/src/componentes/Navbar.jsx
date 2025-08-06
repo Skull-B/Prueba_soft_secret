@@ -1,20 +1,8 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Navbar({ user, setUser }) {
   const navigate = useNavigate();
-
-  // Leer usuario de forma segura
-  let storedUser = null;
-  try {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      storedUser = JSON.parse(userData);
-    }
-  } catch (err) {
-    console.error("Error parsing user from localStorage", err);
-    localStorage.removeItem("user");
-  }
 
   const handleLogout = () => {
     localStorage.removeItem("access");
@@ -30,21 +18,43 @@ function Navbar({ user, setUser }) {
         <h3 style={{ margin: 0, color: "#fff" }}>Gestión de Actas</h3>
       </div>
       <div style={styles.right}>
-        {storedUser ? (
+        {user ? (
           <>
-            <Link to="/actas" style={styles.link}>Actas</Link>
-            {storedUser.rol === "admin" && (
-              <Link to="/gestiones" style={styles.link}>Gestiones</Link>
-            )}
+            <NavLink
+              to="/actas"
+              style={({ isActive }) =>
+                isActive ? { ...styles.link, ...styles.active } : styles.link
+              }
+            >
+              Actas
+            </NavLink>
+
+            <NavLink
+              to="/gestiones"
+              style={({ isActive }) =>
+                isActive ? { ...styles.link, ...styles.active } : styles.link
+              }
+            >
+              Gestiones
+            </NavLink>
+
             <span style={{ color: "#fff", marginRight: "10px" }}>
-              {storedUser.nombre} ({storedUser.rol})
+              {user.nombre} ({user.rol})
             </span>
+
             <button onClick={handleLogout} style={styles.logoutBtn}>
               Cerrar sesión
             </button>
           </>
         ) : (
-          <Link to="/login" style={styles.link}>Login</Link>
+          <NavLink
+            to="/login"
+            style={({ isActive }) =>
+              isActive ? { ...styles.link, ...styles.active } : styles.link
+            }
+          >
+            Login
+          </NavLink>
         )}
       </div>
     </nav>
@@ -70,6 +80,12 @@ const styles = {
     color: "#fff",
     marginRight: "10px",
     textDecoration: "none",
+    padding: "5px 8px",
+    borderRadius: "4px",
+  },
+  active: {
+    background: "#555",
+    fontWeight: "bold",
   },
   logoutBtn: {
     background: "red",

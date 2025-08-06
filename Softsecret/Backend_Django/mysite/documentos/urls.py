@@ -3,13 +3,15 @@ from .views import ActaDetalleView , ActalistaView , VistaProtegida , Compromiso
 
 urlpatterns = [
     path('protegida/', VistaProtegida.as_view(), name='vistaprotegida'),
+
     # Actas
-    path('Actas/', ActalistaView.as_view(), name='actalista'),
-    path('Actas/<int:pk>', ActaDetalleView.as_view(), name='actadetalle'),
-    # Compromisios
-    path('Compromisos/', CompromisoView.as_view(), name='compromiso'),
-    path('Compromisos/<int:pk>', CompromisoDetalleView.as_view(), name='compromisodetalle'),
+    path('actas/', ActalistaView.as_view(), name='actalista'),
+    path('actas/<int:pk>/', ActaDetalleView.as_view(), name='actadetalle'),
+
+    # Compromisos
+    path('compromisos/', CompromisoView.as_view(), name='compromiso'),
+    path('compromisos/<int:pk>/', CompromisoDetalleView.as_view(), name='compromisodetalle'),
+
     # Gestiones
-    path('Gestiones/', GestionView.as_view(), name='gestion'),
-    
+    path('gestiones/', GestionView.as_view(), name='gestion'),
 ]

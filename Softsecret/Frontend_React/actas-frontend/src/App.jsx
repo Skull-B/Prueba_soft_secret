@@ -5,22 +5,22 @@ import Login from "./paginas/Login";
 import Actas from "./paginas/Actas";
 import ActaDetalle from "./paginas/ActaDetalle";
 import NuevaGestion from "./paginas/NuevaGestion";
+import Gestiones from "./paginas/Gestiones"; // Asegúrate de crear este componente
 import ProtectedRoute from "./componentes/ProtectedRoute";
 
 function App() {
-
   const [user, setUser] = useState(() => {
-  try {
-    const storedUser = localStorage.getItem('user');
-    if (!storedUser || storedUser === "undefined" || storedUser === "null") {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser || storedUser === "undefined" || storedUser === "null") {
+        return null;
+      }
+      return JSON.parse(storedUser);
+    } catch (error) {
+      console.error("Error al parsear el usuario:", error);
       return null;
     }
-    return JSON.parse(storedUser);
-  } catch (error) {
-    console.error("Error al parsear el usuario:", error);
-    return null;
-  }
-});
+  });
 
   return (
     <Router>
@@ -46,11 +46,22 @@ function App() {
           }
         />
 
+        {/* Nueva ruta protegida para Gestiones */}
         <Route
-          path="/actas/:id/gestiones/nueva"
+          path="/gestiones"
           element={
             <ProtectedRoute>
-              {user?.rol === "admin" ? <NuevaGestion /> : <Navigate to="/actas" />}
+              <Gestiones />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Ruta para crear gestión de un compromiso */}
+        <Route
+          path="/compromisos/:compromisoId/gestiones/nueva"
+          element={
+            <ProtectedRoute>
+              {user?.rol === "ADMIN" ? <NuevaGestion /> : <Navigate to="/actas" />}
             </ProtectedRoute>
           }
         />

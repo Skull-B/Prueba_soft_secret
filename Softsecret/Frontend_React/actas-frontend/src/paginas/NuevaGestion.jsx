@@ -3,13 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../Api/Conexion";
 
 function NuevaGestion() {
-  const { id } = useParams();
+  const { id } = useParams(); // Este 'id' es del acta o del compromiso?
   const navigate = useNavigate();
 
   const [formulario, setFormulario] = useState({
     fecha: "",
     descripcion: "",
-    archivo: null,
+    Archivo: null, // Cambié a 'Archivo' para que coincida con el modelo
     compromiso: ""
   });
 
@@ -17,8 +17,8 @@ function NuevaGestion() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "archivo") {
-      setFormulario({ ...formulario, archivo: files[0] });
+    if (name === "Archivo") {
+      setFormulario({ ...formulario, Archivo: files[0] });
     } else {
       setFormulario({ ...formulario, [name]: value });
     }
@@ -28,13 +28,13 @@ function NuevaGestion() {
     e.preventDefault();
     setError("");
 
-    if (formulario.archivo) {
-      const ext = formulario.archivo.name.split(".").pop().toLowerCase();
+    if (formulario.Archivo) {
+      const ext = formulario.Archivo.name.split(".").pop().toLowerCase();
       if (!["pdf", "jpg"].includes(ext)) {
         setError("El archivo debe ser PDF o JPG");
         return;
       }
-      if (formulario.archivo.size > 5 * 1024 * 1024) {
+      if (formulario.Archivo.size > 5 * 1024 * 1024) {
         setError("El archivo debe ser menor de 5MB");
         return;
       }
@@ -44,7 +44,7 @@ function NuevaGestion() {
       const formData = new FormData();
       formData.append("fecha", formulario.fecha);
       formData.append("descripcion", formulario.descripcion);
-      if (formulario.archivo) formData.append("archivo", formulario.archivo);
+      if (formulario.Archivo) formData.append("Archivo", formulario.Archivo); // Coincide con el modelo
       formData.append("compromiso", formulario.compromiso);
 
       await api.post(`documentos/gestiones/`, formData, {
@@ -56,7 +56,7 @@ function NuevaGestion() {
       alert("Gestión creada exitosamente");
       navigate(`/actas/${id}`);
     } catch (err) {
-      console.error("Error al crear la gestión:", err);
+      console.error("Error al crear la gestión:", err.response?.data || err.message);
       alert("Error al crear la gestión");
     }
   };
@@ -78,9 +78,9 @@ function NuevaGestion() {
         }}
       >
         <label>
-          Fecha:
+          Fecha y hora:
           <input
-            type="date"
+            type="datetime-local"
             name="fecha"
             value={formulario.fecha}
             onChange={handleChange}
@@ -111,7 +111,7 @@ function NuevaGestion() {
 
         <label>
           Archivo (PDF/JPG):
-          <input type="file" name="archivo" onChange={handleChange} />
+          <input type="file" name="Archivo" onChange={handleChange} />
         </label>
 
         <button type="submit">Guardar Gestión</button>
