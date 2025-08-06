@@ -69,7 +69,7 @@ actas-proyecto/
 
 ```bash
 # 1. Clonar repositorio
-git clone https://github.com/TU_USUARIO/actas-proyecto.git
+https://github.com/Skull-B/Prueba_soft_secret.git
 cd actas-proyecto
 
 # 2. Configurar backend
