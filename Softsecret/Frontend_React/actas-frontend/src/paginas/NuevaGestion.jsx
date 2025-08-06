@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../Api/Conexion";
 
 function NuevaGestion() {
   const { id } = useParams();
@@ -28,7 +28,6 @@ function NuevaGestion() {
     e.preventDefault();
     setError("");
 
-    // Validaciones de archivo
     if (formulario.archivo) {
       const ext = formulario.archivo.name.split(".").pop().toLowerCase();
       if (!["pdf", "jpg"].includes(ext)) {
@@ -39,24 +38,18 @@ function NuevaGestion() {
         setError("El archivo debe ser menor de 5MB");
         return;
       }
-    } else {
-      setError("Debe seleccionar un archivo");
-      return;
     }
 
     try {
       const formData = new FormData();
       formData.append("fecha", formulario.fecha);
       formData.append("descripcion", formulario.descripcion);
-      formData.append("archivo", formulario.archivo);
+      if (formulario.archivo) formData.append("archivo", formulario.archivo);
       formData.append("compromiso", formulario.compromiso);
 
-      const token = localStorage.getItem("access");
-
-      await axios.post(`http://127.0.0.1:8000/documentos/Gestiones/${id}/`, formData, {
+      await api.post(`documentos/gestiones/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`
         }
       });
 
@@ -70,7 +63,7 @@ function NuevaGestion() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>➕ Nueva Gestión</h2>
+      <h2>Nueva Gestión</h2>
       <button onClick={() => navigate(`/actas/${id}`)}>⬅ Volver</button>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -117,8 +110,8 @@ function NuevaGestion() {
         </label>
 
         <label>
-          Archivo:
-          <input type="file" name="archivo" onChange={handleChange} required />
+          Archivo (PDF/JPG):
+          <input type="file" name="archivo" onChange={handleChange} />
         </label>
 
         <button type="submit">Guardar Gestión</button>
@@ -128,4 +121,3 @@ function NuevaGestion() {
 }
 
 export default NuevaGestion;
-

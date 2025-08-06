@@ -8,6 +8,20 @@ import NuevaGestion from "./paginas/NuevaGestion";
 import ProtectedRoute from "./componentes/ProtectedRoute";
 
 function App() {
+
+  const [user, setUser] = useState(() => {
+  try {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser || storedUser === "undefined" || storedUser === "null") {
+      return null;
+    }
+    return JSON.parse(storedUser);
+  } catch (error) {
+    console.error("Error al parsear el usuario:", error);
+    return null;
+  }
+});
+
   return (
     <Router>
       <Navbar user={user} setUser={setUser} />

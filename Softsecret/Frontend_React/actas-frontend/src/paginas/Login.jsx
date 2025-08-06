@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../Api/Conexion"; // Usar la nueva instancia
 
- function Login() {
+function Login({ setUser }) {
   const navigate = useNavigate();
   const [correo, setCorreo] = useState("");
   const [contraseña, setContraseña] = useState("");
@@ -12,7 +12,7 @@ import axios from "axios";
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/usuarios/login/", {
+      const res = await api.post("usuarios/login/", {
         correo,
         contrasena: contraseña,
       });
@@ -23,6 +23,9 @@ import axios from "axios";
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
       localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Actualizar estado del usuario
+      setUser(data.user);
 
       navigate("/actas");
     } catch (err) {

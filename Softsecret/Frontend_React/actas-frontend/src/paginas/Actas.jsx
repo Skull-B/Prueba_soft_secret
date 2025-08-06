@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../Api/Conexion";
 import { useNavigate } from "react-router-dom";
 
 function Actas() {
@@ -10,17 +10,12 @@ function Actas() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchActas(); // Llamado inicial
+    fetchActas();
   }, []);
 
   const fetchActas = async () => {
     try {
-      const token = localStorage.getItem("access");
-      const response = await axios.get("http://127.0.0.1:8000/documentos/Actas/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get("documentos/actas/"); // URL corregida
       setActas(response.data);
     } catch (error) {
       console.error("Error al obtener actas:", error);
@@ -28,12 +23,12 @@ function Actas() {
   };
 
   const handleDetalle = (id) => {
-    navigate(`/documentos/actas/${id}`);
+    navigate(`/actas/${id}`); // Ruta corregida
   };
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>📄 Lista de Actas</h2>
+      <h2>Lista de Actas</h2>
 
       {/* FILTROS */}
       <div style={{ marginBottom: "15px" }}>

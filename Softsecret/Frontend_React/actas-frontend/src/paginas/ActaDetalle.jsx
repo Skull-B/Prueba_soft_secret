@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../Api/Conexion";
 
 function ActaDetalle() {
   const { id } = useParams();
@@ -14,12 +14,7 @@ function ActaDetalle() {
 
   const fetchActa = async () => {
     try {
-      const token = localStorage.getItem("access");
-      const response = await axios.get(`http://127.0.0.1:8000/documentos/Actas/${id}/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get(`documentos/actas/${id}/`); // URL corregida
       setActa(response.data);
     } catch (error) {
       console.error("Error al obtener acta:", error);
@@ -33,7 +28,7 @@ function ActaDetalle() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>📄 Detalle del Acta</h2>
+      <h2>Detalle del Acta</h2>
       <button onClick={() => navigate("/actas")}>⬅ Volver</button>
 
       <div style={{ marginTop: "15px" }}>
@@ -42,7 +37,6 @@ function ActaDetalle() {
         <p><b>Fecha:</b> {acta.fecha}</p>
         <p><b>Creador:</b> {acta.creador}</p>
 
-        {/* Mostrar PDF si existe */}
         {acta.Archivo && (
           <p>
             <b>Archivo:</b>{" "}
@@ -57,8 +51,7 @@ function ActaDetalle() {
         )}
       </div>
 
-      {/* Lista de compromisos */}
-      <h3>📌 Compromisos</h3>
+      <h3> Compromisos</h3>
       {acta.compromisos && acta.compromisos.length > 0 ? (
         <ul>
           {acta.compromisos.map((comp) => (
@@ -71,10 +64,9 @@ function ActaDetalle() {
         <p>No hay compromisos asociados</p>
       )}
 
-      {/* Botón para agregar gestión */}
       <div style={{ marginTop: "20px" }}>
         <button onClick={() => navigate(`/actas/${id}/gestiones/nueva`)}>
-          ➕ Agregar Gestión
+          Agregar Gestión
         </button>
       </div>
     </div>
